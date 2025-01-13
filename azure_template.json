@@ -1,0 +1,25 @@
+{
+    "version": "2.0",
+    "functions": [
+      {
+        "name": "FlaskFunction",
+        "scriptFile": "app.py",
+        "entryPoint": "main",
+        "bindings": [
+          {
+            "authLevel": "function",
+            "type": "httpTrigger",
+            "direction": "in",
+            "name": "req",
+            "methods": ["get", "post"]
+          },
+          {
+            "type": "http",
+            "direction": "out",
+            "name": "$return"
+          }
+        ]
+      }
+    ]
+  }
+  
