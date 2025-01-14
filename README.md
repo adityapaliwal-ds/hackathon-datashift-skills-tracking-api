@@ -1,6 +1,6 @@
 # Flask AWS and Azure Deployment
 
-This project demonstrates how to deploy a Flask application to both AWS Lambda and Azure Functions.
+This repo provides a starting point for building api using python, flask and deploy it on aws cloud using AWS Lambda and AWS API Gateway
 
 ## Project Structure
 
