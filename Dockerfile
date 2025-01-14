@@ -27,8 +27,8 @@ COPY deployment/ /app/deployment
 COPY requirements.txt /app/requirements.txt
 
 # Make the deploy_aws.sh script executable
-RUN chmod +x /app/deployment/deploy_aws.sh
-RUN chmod +x /app/deployment/deploy_azure.sh
+RUN chmod +x /app/deployment/aws/deploy_aws.sh
+RUN chmod +x /app/deployment/azure/deploy_azure.sh
 
 # Install the Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
