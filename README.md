@@ -20,11 +20,6 @@ This project demonstrates how to deploy a Flask application to both AWS Lambda a
 ## Deployment Instructions
 
 ### Deploy to AWS Lambda
-1- build docker image
-docker build docker build -t  datashift-skill-api 
-
-2- docker run image with aws credentials
-docker run -d -e AWS_ACCESS_KEY_ID="AKIA3RYC6HZVQ2GBFXFB" -e AWS_SECRET_ACCESS_KEY="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" -e AWS_DEFAULT_REGION="eu-central-1" -p 5000:5000 datashift-skill-api
 
 This will return the cointainer-id:
 
