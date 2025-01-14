@@ -11,6 +11,13 @@ def index():
     )
 
 
+@app.route("/goodbye")
+def goodbye():
+    return jsonify(
+        status=200, message="Goodbye from datashift data engineering hackathon"
+    )
+
+
 # Lambda handler
 def lambda_handler(event, context):
     return awsgi.response(app, event, context)

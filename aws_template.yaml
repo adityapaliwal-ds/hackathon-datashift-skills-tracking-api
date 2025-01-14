@@ -13,9 +13,17 @@ Resources:
       Environment:
         Variables:
           FLASK_ENV: production
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonAPIGatewayInvokeFullAccess
       Events:
-        ApiEvent:
+        WelcomeApiEvent:
           Type: Api
           Properties:
-            Path: /{proxy+}
+            Path: /welcome
+            Method: ANY
+        GoodbyeApiEvent:
+          Type: Api
+          Properties:
+            Path: /goodbye
             Method: ANY
