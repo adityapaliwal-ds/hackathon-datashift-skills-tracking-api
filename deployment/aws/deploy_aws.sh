@@ -7,9 +7,9 @@ if ! [ -x "$(command -v sam)" ]; then
 fi
 
 # Build the app
-sam build
+sam build --template-file /app/aws_template.yaml
 
 # Deploy the app to AWS
-sam deploy --no-confirm-changeset --capabilities CAPABILITY_IAM
+sam deploy --guided --capabilities CAPABILITY_IAM
 
 echo "Flask app deployed to AWS Lambda successfully!"
