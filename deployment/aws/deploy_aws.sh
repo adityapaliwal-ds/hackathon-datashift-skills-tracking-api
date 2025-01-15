@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Constants
-TEMPLATE_FILE="/app/aws_template.yaml"
+TEMPLATE_FILE="/app/aws-template.yaml"
 
 # Functions
 error_exit() {
@@ -12,11 +12,6 @@ error_exit() {
 # Check for AWS SAM CLI
 if ! command -v sam &>/dev/null; then
   error_exit "AWS SAM CLI is not installed. Please install it and try again."
-fi
-
-# Check if template file exists
-if [ ! -f "$TEMPLATE_FILE" ]; then
-  error_exit "Template file '$TEMPLATE_FILE' not found."
 fi
 
 # Build the app

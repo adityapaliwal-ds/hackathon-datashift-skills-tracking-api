@@ -27,7 +27,7 @@ WORKDIR /app
 
 # Copy the application code and templates to the container
 COPY src/ /app
-COPY aws_template.yaml /app
+COPY aws-template.yaml /app
 COPY deployment/ /app/deployment
 COPY requirements.txt /app/requirements.txt
 

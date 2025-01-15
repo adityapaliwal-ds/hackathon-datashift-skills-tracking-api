@@ -24,7 +24,7 @@ Resources:
         - AmazonAPIGatewayInvokeFullAccess
         - AmazonRDSFullAccess
       Tags:
-        - Key: Username 
+          Key: Username
           Value: !Ref UsernameTag
       Events:
         WelcomeApiEvent:
@@ -63,7 +63,7 @@ Resources:
       VPCSecurityGroups:
         - !GetAtt RDSSecurityGroup.GroupId
       Tags:
-        - Key: Username 
+          Key: Username 
           Value: !Ref UsernameTag
 
   # Security Group for RDS
@@ -76,16 +76,3 @@ Resources:
           FromPort: 5432
           ToPort: 5432
           CidrIp: 0.0.0.0/0  # Restrict to appropriate CIDR range or VPC
-  
-  Outputs:
-  FlaskAppApiUrl:
-    Description: "API Gateway URL for the Flask app"
-    Value: "https://${FlaskAppFunction.ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
-
-  RDSHost:
-    Description: "The endpoint address of the RDS instance"
-    Value: !GetAtt RDSInstance.Endpoint.Address
-
-  RDSPort:
-    Description: "The port of the RDS instance"
-    Value: "5432"
