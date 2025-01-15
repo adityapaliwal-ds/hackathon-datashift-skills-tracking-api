@@ -9,6 +9,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 ssm = boto3.client("ssm")
+DB_HOST = "host"  # Replace with your DB endpoint
+DB_USER = "user"  # Replace with your DB user
+DB_NAME = "postgres"
+DB_PORT = 5432
 
 
 def get_db_password():
@@ -26,9 +30,6 @@ def get_db_password():
 
 def connect_to_db():
     """Connect to the PostgreSQL database and return the connection object"""
-    db_host = "hackathon-test-api-rdsinstance-bvybzxgbfsoj.c38uk6c8utvq.eu-central-1.rds.amazonaws.com"
-    db_user = "testuser"
-    db_name = "postgres"
     db_password = get_db_password()  # Fetch the password securely
 
     if not db_password:
@@ -38,7 +39,11 @@ def connect_to_db():
     try:
         # Connect to the PostgreSQL database
         conn = psycopg2.connect(
-            host=db_host, user=db_user, password=db_password, dbname=db_name, port=5432
+            host=DB_HOST,
+            user=DB_USER,
+            password=db_password,
+            dbname=DB_NAME,
+            port=DB_PORT,
         )
         logger.info("Successfully connected to the database.")
         return conn

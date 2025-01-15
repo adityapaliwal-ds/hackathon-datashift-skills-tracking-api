@@ -1,6 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  UsernameTag:
+    Type: String
+    Description: The team or group name to be used as the tag value
+    Default: DsHackathonGroup1 # Make sure to update this tag value accourding to your group number
+
 Resources:
   FlaskAppFunction:
     Type: AWS::Serverless::Function
@@ -17,23 +23,31 @@ Resources:
         - AWSLambdaBasicExecutionRole
         - AmazonAPIGatewayInvokeFullAccess
         - AmazonRDSFullAccess
+      Tags:
+        - Key: Username 
+          Value: !Ref UsernameTag
       Events:
         WelcomeApiEvent:
           Type: Api
           Properties:
             Path: /welcome
-            Method: ANY
+            Method: GET
         GoodbyeApiEvent:
           Type: Api
           Properties:
             Path: /goodbye
-            Method: ANY
-        # Add your new api paths here
+            Method: GET
         HealthApiEvent:
           Type: Api
           Properties:
             Path: /health
             Method: GET
+        # # Add your new api paths here
+        # NewApiEvent:
+        #   Type: Api
+        #   Properties:
+        #     Path: /newapi
+        #     Method: GET
 
   # RDS Instance
   RDSInstance:
@@ -43,11 +57,14 @@ Resources:
       AllocatedStorage: 5
       Engine: postgres
       EngineVersion: "13.18"
-      MasterUsername: DsHackathonGroup1
-      MasterUserPassword: !Sub '{{resolve:ssm-secure:/DsHackathonGroup1/rds/password}}'
+      MasterUsername: hackathonuser
+      MasterUserPassword: !Sub '{{resolve:ssm-secure:/hackathonuser/rds/password}}'
       PubliclyAccessible: true
       VPCSecurityGroups:
         - !GetAtt RDSSecurityGroup.GroupId
+      Tags:
+        - Key: Username 
+          Value: !Ref UsernameTag
 
   # Security Group for RDS
   RDSSecurityGroup:
