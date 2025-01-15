@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     curl \
     unzip \
+    libpq-dev \
+    build-essential \
+    gcc \
     && rm -rf /var/lib/apt/lists/*
 
 # Install AWS SAM CLI
@@ -16,19 +19,20 @@ RUN curl -sL https://github.com/aws/aws-sam-cli/releases/download/v1.132.0/aws-s
     && sudo ./tmp/install \
     && rm -rf /tmp/aws-sam-cli.zip /tmp/install
 
+# Update install 'less' utility tool used by aws cli
+RUN apt-get update && apt-get install -y --no-install-recommends less
+
 # Set the working directory in the container
 WORKDIR /app
 
 # Copy the application code and templates to the container
 COPY src/ /app
 COPY aws_template.yaml /app
-COPY azure_template.json /app
 COPY deployment/ /app/deployment
 COPY requirements.txt /app/requirements.txt
 
 # Make the deploy_aws.sh script executable
 RUN chmod +x /app/deployment/aws/deploy_aws.sh
-RUN chmod +x /app/deployment/azure/deploy_azure.sh
 
 # Install the Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt

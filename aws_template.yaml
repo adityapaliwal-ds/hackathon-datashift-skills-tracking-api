@@ -16,6 +16,7 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonAPIGatewayInvokeFullAccess
+        - AmazonRDSFullAccess
       Events:
         WelcomeApiEvent:
           Type: Api
@@ -27,3 +28,34 @@ Resources:
           Properties:
             Path: /goodbye
             Method: ANY
+        # Add your new api paths here
+        HealthApiEvent:
+          Type: Api
+          Properties:
+            Path: /health
+            Method: GET
+
+  # RDS Instance
+  RDSInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: db.t4g.micro
+      AllocatedStorage: 5
+      Engine: postgres
+      EngineVersion: "13.18"
+      MasterUsername: DsHackathonGroup1
+      MasterUserPassword: !Sub '{{resolve:ssm-secure:/DsHackathonGroup1/rds/password}}'
+      PubliclyAccessible: true
+      VPCSecurityGroups:
+        - !GetAtt RDSSecurityGroup.GroupId
+
+  # Security Group for RDS
+  RDSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable database access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 0.0.0.0/0  # Restrict to appropriate CIDR range or VPCy
