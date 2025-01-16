@@ -63,7 +63,7 @@ Resources:
       VPCSecurityGroups:
         - !GetAtt RDSSecurityGroup.GroupId
       Tags:
-          Key: Username 
+        - Key: Username 
           Value: !Ref UsernameTag
 
   # Security Group for RDS
