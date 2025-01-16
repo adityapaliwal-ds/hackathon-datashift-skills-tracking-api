@@ -5,7 +5,7 @@ Parameters:
   UsernameTag:
     Type: String
     Description: The team or group name to be used as the tag value
-    Default: test
+    Default: test # Make sure to update this value to (DsHackathonGroupX) where X is your group number
 
 Resources:
   # VPC for the Team
@@ -18,6 +18,8 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${UsernameTag}-VPC"
+        - Key: Username
+          Value: !Ref UsernameTag
 
   # Subnet for the Team (AZ 1)
   TeamSubnetAZ1:
@@ -30,6 +32,8 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${UsernameTag}-Subnet-AZ1"
+        - Key: Username
+          Value: !Ref UsernameTag
 
   # Subnet for the Team (AZ 2)
   TeamSubnetAZ2:
@@ -42,6 +46,8 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${UsernameTag}-Subnet-AZ2"
+        - Key: Username
+          Value: !Ref UsernameTag
 
   # Internet Gateway for the Team VPC
   TeamInternetGateway:
@@ -50,12 +56,46 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${UsernameTag}-IGW"
+        - Key: Username
+          Value: !Ref UsernameTag
 
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       VpcId: !Ref TeamVPC
       InternetGatewayId: !Ref TeamInternetGateway
+
+  # Route Table for Public Subnets
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref TeamVPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${UsernameTag}-PublicRouteTable"
+        - Key: Username
+          Value: !Ref UsernameTag
+
+  # Route to Internet Gateway
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref TeamInternetGateway
+
+  # Associate Subnets with Public Route Table
+  AssociateSubnetAZ1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref TeamSubnetAZ1
+      RouteTableId: !Ref PublicRouteTable
+
+  AssociateSubnetAZ2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref TeamSubnetAZ2
+      RouteTableId: !Ref PublicRouteTable
 
   # Flask App Lambda Function
   FlaskAppFunction:
@@ -128,6 +168,8 @@ Resources:
       Tags:
         - Key: Username 
           Value: !Ref UsernameTag
+        - Key: Name
+          Value: !Sub "${UsernameTag}-RDSInstance"
 
   # Security Group for RDS
   RDSSecurityGroup:
@@ -141,7 +183,7 @@ Resources:
           ToPort: 5432
           CidrIp: 0.0.0.0/0  # Restrict to appropriate CIDR range or VPC
 
-  # DB Subnet Group for RDS (Updated with two subnets)
+  # DB Subnet Group for RDS
   RDSSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
@@ -150,5 +192,7 @@ Resources:
         - !Ref TeamSubnetAZ1
         - !Ref TeamSubnetAZ2
       Tags:
+        - Key: Username
+          Value: !Ref UsernameTag
         - Key: Name
           Value: !Sub "${UsernameTag}-RDSSubnetGroup"
