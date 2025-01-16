@@ -10,7 +10,17 @@ This GitHub repository provides a starter pack to help you build your own **Data
 
 The repository includes the following files and directories:
 ```
-Deployment ├── Aws │ └── deploy_aws.sh Src ├── app.py ├── db.py ├── aws_template.yaml ├── Dockerfile ├── requirements.txt └── README.md
+├── Hackathon-datashift-Skills-Tracking-API
+│   ├──deployment
+│   │   ├── deploy_aws.sh
+├── src
+│   ├── app.py
+│   ├── db.py
+├── aws-template.yaml
+├── Dockerfile
+├── README.md
+├── requirements.txt
+└── .gitignore
 ```
 
 Clone the repo to your preferred IDE using this link: `https://github.com/adityapaliwal-ds/hackathon-datashift-skills-tracking-api.git`. Go through each file and follow the instructions carefully to set up the project.
