@@ -5,9 +5,59 @@ Parameters:
   UsernameTag:
     Type: String
     Description: The team or group name to be used as the tag value
-    Default: DsHackathonGroup1 # Make sure to update this tag value accourding to your group number
+    Default: test
 
 Resources:
+  # VPC for the Team
+  TeamVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${UsernameTag}-VPC"
+
+  # Subnet for the Team (AZ 1)
+  TeamSubnetAZ1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref TeamVPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]  # AZ 1 (e.g., eu-central-1a)
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${UsernameTag}-Subnet-AZ1"
+
+  # Subnet for the Team (AZ 2)
+  TeamSubnetAZ2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref TeamVPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]  # AZ 2 (e.g., eu-central-1b)
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${UsernameTag}-Subnet-AZ2"
+
+  # Internet Gateway for the Team VPC
+  TeamInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${UsernameTag}-IGW"
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref TeamVPC
+      InternetGatewayId: !Ref TeamInternetGateway
+
+  # Flask App Lambda Function
   FlaskAppFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -24,8 +74,14 @@ Resources:
         - AmazonAPIGatewayInvokeFullAccess
         - AmazonRDSFullAccess
       Tags:
-          Key: Username
-          Value: !Ref UsernameTag
+        Key: Username
+        Value: !Ref UsernameTag
+      VpcConfig:
+        SecurityGroupIds: 
+          - !Ref FlaskAppSecurityGroup
+        SubnetIds:
+          - !Ref TeamSubnetAZ1
+          - !Ref TeamSubnetAZ2
       Events:
         WelcomeApiEvent:
           Type: Api
@@ -42,14 +98,20 @@ Resources:
           Properties:
             Path: /health
             Method: GET
-        # # Add your new api paths here
-        # NewApiEvent:
-        #   Type: Api
-        #   Properties:
-        #     Path: /newapi
-        #     Method: GET
 
-  # RDS Instance
+  # Security Group for Flask App
+  FlaskAppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow Lambda Function to communicate
+      VpcId: !Ref TeamVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  # RDS Instance in the Team's VPC
   RDSInstance:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -61,7 +123,8 @@ Resources:
       MasterUserPassword: !Sub '{{resolve:ssm-secure:/hackathonuser/rds/password}}'
       PubliclyAccessible: true
       VPCSecurityGroups:
-        - !GetAtt RDSSecurityGroup.GroupId
+        - !Ref RDSSecurityGroup
+      DBSubnetGroupName: !Ref RDSSubnetGroup
       Tags:
         - Key: Username 
           Value: !Ref UsernameTag
@@ -71,8 +134,21 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable database access
+      VpcId: !Ref TeamVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 5432
           ToPort: 5432
           CidrIp: 0.0.0.0/0  # Restrict to appropriate CIDR range or VPC
+
+  # DB Subnet Group for RDS (Updated with two subnets)
+  RDSSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet group for RDS
+      SubnetIds:
+        - !Ref TeamSubnetAZ1
+        - !Ref TeamSubnetAZ2
+      Tags:
+        - Key: Name
+          Value: !Sub "${UsernameTag}-RDSSubnetGroup"
