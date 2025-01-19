@@ -36,7 +36,11 @@ Before you start, ensure that Docker is installed on your system, as it is requi
    - User accounts for each user/team are already created. Make sure you have the credentials to start login and creating access keys for AWS CLI. 
    - If by this time you lack credentials to login, we suggest to reach out to one of the organizers.
    - Login to the aws console using [this link](https://aws.amazon.com/console/)
+   ![AWS Console UI](./images/console.png)
+   ![AWS Login Screen for IAM user](./images/login.png)
+
    - Once you login, look for IAM in the navigation bar, Look into users, and then click on your username to create access keys. 
+   
 
    *Note: Keep the keys stored in some accessable locaton because, secret-access-key, if lost, it needs to be created again.*
    
