@@ -47,9 +47,9 @@ Before you start, ensure that Docker is installed on your system, as it is requi
 
    - Once you login, look for IAM in the navigation bar, Look into users, and then click on your username to create access keys. 
    
-   ![AWS Login Screen for IAM user](./images/userplane.png)
+   ![AWS IAM User Plane](./images/userplane.png)
 
-   ![AWS Login Screen for IAM user](./images/accesskey.png)
+   ![Creating Access key for new user](./images/accesskey.png)
 
    *Note: Keep the keys stored in some accessable locaton because, secret-access-key, if lost, it needs to be created again.*
    
@@ -97,20 +97,12 @@ Before you start, ensure that Docker is installed on your system, as it is requi
   docker exec -it <container-id> /bin/bash
   ```
 
-#### 6. **Navigate to the Deployment Folder:**
-
-  Once inside the container, navigate to the deployment/aws directory:
-
-  ```bash 
-  cd /deployment/aws
-  ```
-
-#### 7. **Deploy the AWS Resources:**
+#### 6. **Deploy the AWS Resources:**
 
   Run the deployment script:
 
   ```bash
-  ./deploy_aws.sh
+  ./deployment/aws/deploy_aws.sh
   ```
 
   - During the deployment, you'll be prompted to enter some configuration values. Provide the following inputs:
@@ -125,7 +117,8 @@ Before you start, ensure that Docker is installed on your system, as it is requi
       - Save arguments to configuration file[Y/N]: Y
       - SAM Configuration File[samconfig.toml]: press enter
       - SAM Configuration Environment[default]: press enter
-  *Note: *
+  
+  *Note: Step 6 can be executed in Docker UI as well if you prefer. Navigate to containers, select the running container and open the terminal to trigger the deployment script.*
 
 
 ## 5. Accessing the database locally
@@ -140,7 +133,26 @@ Before you start, ensure that Docker is installed on your system, as it is requi
         - Host: <your-db-host>
         - Database: postgres
         - Username: hackathonuser
-        - Password: <your-db-password>
-        - Click Test Connection to verify everything is working.
+        - Password: <your-db-password> 
+        
+  *Note: The database password is securely stored under AWS Systems Manager --> Parameter Store*
+  ![Parameter Store under AWS Systems Manager](./images/password.png)
 
+## 6. Points to remember:
+  When working with the setup, keep the following points in mind:
+
+  - There are three code environments involved:
+    - The code you modify locally on your PC.
+    - The code copied into the Docker container.
+    - The code deployed on AWS Lambda.
+
+  - Any changes to the code, such as updating the database host or adding a new endpoint, require the following steps:
+
+    - Kill the currently running container.
+    - Rebuild the Docker image using docker build to ensure the changes are incorporated into the container.
+    - Redeploy the updated container code to AWS Lambda.
+
+  - **Tip:** To streamline development and avoid rebuilding the container for every change, you can **mount your local directory to the container's root directory** using Docker's bind mount feature. This allows real-time updates to your code within the running container. For more info on this, follow [this link:](https://docs.docker.com/engine/storage/bind-mounts/)
+
+## 7. AWS Walkaround:
 
