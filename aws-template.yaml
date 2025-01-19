@@ -5,7 +5,7 @@ Parameters:
   UsernameTag:
     Type: String
     Description: The team or group name to be used as the tag value
-    Default: DsHackathonGroup1 # Make sure to update this value to (DsHackathonGroupX) where X is your group number
+    Default: DsHackathonGroupX # Make sure to update this value to (DsHackathonGroupX) where X is your group number
 
 Resources:
   # VPC for the Team
