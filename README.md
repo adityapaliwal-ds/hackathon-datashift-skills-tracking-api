@@ -158,6 +158,10 @@ Before you start, ensure that Docker is installed on your system, as it is requi
 
 ## 7. AWS Walkaround:
 
+- **Region:** Make sure you are in Europe(Frankfurt) region, on top right corner, otherwise you might not be able to see the changes you deployed on AWS cloud.
+
+![Region](./images/region.png)
+
 - **AWS Lambda:** Navigate to the API Gateway service to find the endpoints for your CRUD operations. These endpoints allow interaction with your deployed API.
 
 ![AWS Lambda](./images/lambda.png)
