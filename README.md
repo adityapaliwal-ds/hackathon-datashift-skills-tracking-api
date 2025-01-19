@@ -23,7 +23,7 @@ The repository includes the following files and directories:
 └── .gitignore
 ```
 
-Clone the repo to your preferred IDE using this link: `https://github.com/adityapaliwal-ds/hackathon-datashift-skills-tracking-api.git`. Go through each file and follow the instructions carefully to set up the project.
+Clone the repo to your preferred IDE using [this link:](https://github.com/adityapaliwal-ds/hackathon-datashift-skills-tracking-api.git). Go through each file and follow the instructions carefully to set up the project.
 
 ## 3. Prerequisites
 
@@ -35,6 +35,7 @@ Before you start, ensure that Docker is installed on your system, as it is requi
 
    - User accounts for each user/team are already created. Make sure you have the credentials to start login and creating access keys for AWS CLI. 
    - If by this time you lack credentials to login, we suggest to reach out to one of the organizers.
+   - Login to the aws console using [this link](https://aws.amazon.com/console/)
    - Once you login, look for IAM in the navigation bar, Look into users, and then click on your username to create access keys. 
 
    *Note: Keep the keys stored in some accessable locaton because, secret-access-key, if lost, it needs to be created again.*
@@ -109,11 +110,12 @@ Before you start, ensure that Docker is installed on your system, as it is requi
       - Disable rollback[y/N]: N
       - FlaskAppFunction has no authentication. Is this okay?[y/N]: y
       - Save arguments to configuration file[Y/N]: Y
-        SAM Configuration File[samconfig.toml]: press enter
-        SAM Configuration Environment[default]: press enter
+      - SAM Configuration File[samconfig.toml]: press enter
+      - SAM Configuration Environment[default]: press enter
+  *Note: *
 
 
-## 5. Database Setup
+## 5. Accessing the database locally
   By now, your PostgreSQL database should be running on AWS. You can connect to it locally using a database management tool like DBeaver.
 
   To Connect to the Database:
