@@ -154,5 +154,20 @@ Before you start, ensure that Docker is installed on your system, as it is requi
 
   - **Tip:** To streamline development and avoid rebuilding the container for every change, you can **mount your local directory to the container's root directory** using Docker's bind mount feature. This allows real-time updates to your code within the running container. For more info on this, follow [this link:](https://docs.docker.com/engine/storage/bind-mounts/)
 
+  - The purpose of this setup is to provide you with a functional foundation, **not to limit your creativity or tools.** Feel free to explore alternative approaches to build and deploy APIs, set up databases, or use entirely different technologies and methodologies that align with your expertise or interests. 
+
 ## 7. AWS Walkaround:
 
+- **AWS Lambda:** Navigate to the API Gateway service to find the endpoints for your CRUD operations. These endpoints allow interaction with your deployed API.
+
+![AWS Lambda](./images/lambda.png)
+
+- **AWS API GATEWAY:** Navigate to the API Gateway service to find the endpoints for your CRUD operations. These endpoints allow interaction with your deployed API.
+
+![AWS API Gateway](./images/apigateway.png)
+
+- **AWS RDS:** Your team's PostgreSQL server, hosted via Amazon RDS, can be accessed under the RDS service in the AWS Management Console.
+
+![AWS RDS](./images/rds.png)
+
+**Tip:** To learn more about the underlying setup—such as the VPC, subnets, and other networking configurations associated with your database instance—navigate to the respective AWS services or refer to the [aws documentation](https://docs.aws.amazon.com/) 
