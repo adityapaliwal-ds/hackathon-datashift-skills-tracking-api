@@ -164,7 +164,7 @@ Before you start, ensure that Docker is installed on your system, as it is requi
 
 - **AWS API GATEWAY:** Navigate to the API Gateway service to find the endpoints for your CRUD operations. These endpoints allow interaction with your deployed API.
 
-![AWS API Gateway](./images/apigateway.png)
+![AWS API Gateway](./images/api-gateway.png)
 
 - **AWS RDS:** Your team's PostgreSQL server, hosted via Amazon RDS, can be accessed under the RDS service in the AWS Management Console.
 
